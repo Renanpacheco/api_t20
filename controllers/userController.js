@@ -18,7 +18,7 @@ module.exports = class UserController{
             res.status(422).json({message:"Please enter the password"})
             return
         }
-        if(!gm){
+        if(gm ===null){
             res.status(422).json({message:"Please enter if the player is a gm"})
             return
         }
@@ -41,10 +41,16 @@ module.exports = class UserController{
 
         try {
             const newUser = await user.save()
-            await createUsertoken(newUser,req, res)
+            res.status(200).json(newUser)
         } catch (error) {
             res.status(500).json({ message: error })
         }
 
+    }
+
+    static async getAll(req,res){
+        const sheets = await User.find().sort('name')
+        res.status(200).json({sheets: sheets});
+        
     }
 }
